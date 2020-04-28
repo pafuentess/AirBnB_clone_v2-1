@@ -77,16 +77,22 @@ class DBStorage:
 
     def get(self, cls, id):
         """  retrieve one object """
-        if cls and id:
-            string = str(cls)
-            split = string.split(".")
-            copy = self.cut_char(split[2])
+        if type(cls) is not  str:
+            if cls and id:
+                string = str(cls)
+                split = string.split(".")
+                copy = self.cut_char(split[2])
+                data = self.all(cls)
+                search = "{}.{}".format(copy, id)
+                if search in data:
+                    return data[search]
+        else:
             data = self.all(cls)
-            search = "{}.{}".format(copy, id)
+            search = "{}.{}".format(cls, id)
             if search in data:
                 return data[search]
-        else:
-            return None
+        return (None)
+
 
     def count(self, cls=None):
         """ count the number of objects in storage """
