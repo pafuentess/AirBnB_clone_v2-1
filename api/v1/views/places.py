@@ -9,46 +9,49 @@ from models.place import Place
 from models.city import City
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
 def retrieve_all_places(city_id):
     """ Retrieves the list of amenities """
-    if "city.{}".format(city_id) not in cities:
-        abort (404)
+    cities = storage.all('City')
+    if "City.{}".format(city_id) not in cities:
+        abort(404)
     return jsonify([i.to_dict() for i in
-                       storage.get('City', city_id).places])
+                   storage.get('City', city_id).places])
 
 
 @app_views.route('/places/<place_id>',
                  methods=['GET'], strict_slashes=False)
-def retrieve_places_id(place_id=None):
+def retrieve_places_id(place_id):
     """ Retrieves a Amenity object """
     list_places = storage.all('Place')
     if "Place.{}".format(place_id) not in list_places:
         abort(404)
     places = storage.get('Place', place_id)
-    if place is None:
+    if places is None:
         abort(404)
-    return jsonify(place.to_dict())
+    return jsonify(places.to_dict())
 
 
-@app_views.route("/places/<place_id>",
+@app_views.route('/places/<place_id>',
                  methods=['DELETE'], strict_slashes=False)
-def delete_place(place_id=None):
+def delete_place(place_id):
     """ delete amenity """
-    place = storage.get("Place", place_id)
-    if place is None:
-        abort(404)
-    storage.delete(place)
+    places = storage.get("Place", place_id)
+    if places is None:
+         abort(404)
+    storage.delete(places)
     storage.save()
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def create_place(city_id):
     """ create amenity """
     cities = storage.all("City")
     if "city.{}".format(city_id) not in cities:
-        abort (404)
+        abort(404)
     city = storage.get("City", city_id)
     if city is None:
         abort(404)
@@ -61,7 +64,6 @@ def create_place(city_id):
     instance = Place(**dic)
     instance.save()
     return jsonify(instance.to_dict()), 201
-
 
 
 @app_views.route('/place/<place_id>',
