@@ -34,6 +34,8 @@ def retrieve_city(city_id=None):
 def delete_city(city_id=None):
     """ retrieve cities """
     cities = storage.get("City", city_id)
+    if cities is None:
+        abort(404)
     cities.delete()
     cities.save()
     return jsonify({}), 200
@@ -43,6 +45,9 @@ def delete_city(city_id=None):
                  methods=['POST'], strict_slashes=False)
 def create_cites_of_state_id(state_id=None):
     """ create cities """
+    state = storage.get("State", state_id)
+    if state is None:
+        abort(404)
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
     if 'name' not in request.get_json():
@@ -59,6 +64,8 @@ def update_city(cities_id):
     """ update state """
     keys = ['id', 'created_at', 'updated_at', 'state_id']
     city = storage.get('City', cities_id)
+    if city is None:
+        abort(404)
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
     for key, value in request.get_json().items():
