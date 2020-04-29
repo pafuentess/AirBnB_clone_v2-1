@@ -12,8 +12,7 @@ from models.amenity import Amenity
 def retrieve_all_amenities():
     """ Retrieves the list of amenities """
     amenities = storage.all("Amenity")
-    amenities = [i.to_dict() for i in amenities.values()
-                 if i.state_id == state_id]
+    amenities = [i.to_dict() for i in amenities.values()]
     return (jsonify(amenities))
 
 
@@ -34,8 +33,8 @@ def delete_amenity(amenity_id=None):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    amenity.delete()
-    amenity.save()
+    storage.delete(amenity)
+    storage.save()
     return jsonify({}), 200
 
 
