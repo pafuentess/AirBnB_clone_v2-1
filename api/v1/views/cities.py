@@ -45,7 +45,7 @@ def create_cites_of_state_id(state_id=None):
     """ create cities """
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
-    if 'name' not in request.json:
+    if 'name' not in request.get_json():
         return jsonify({"error": "Missing name"}), 400
     dic = request.get_json()
     dic.update({'state_id': state_id})
@@ -57,7 +57,7 @@ def create_cites_of_state_id(state_id=None):
 @app_views.route('/cities/<cities_id>', methods=['PUT'], strict_slashes=False)
 def update_city(cities_id):
     """ update state """
-    keys = ['id', 'created_at', 'updated_at']
+    keys = ['id', 'created_at', 'updated_at', 'state_id']
     city = storage.get('City', cities_id)
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
