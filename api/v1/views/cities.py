@@ -13,7 +13,7 @@ from models.state import City
 def retrieve_cites_of_state_id(state_id=None):
     """ Retrieves the list of all City objects of a State """
     states = storage.get("State", state_id)
-    if state is None:
+    if states is None:
         abort(404)
     cities = storage.all("City")
     cities_of_state = [i.to_dict() for i in cities.values()
@@ -55,16 +55,16 @@ def create_cites_of_state_id(state_id=None):
 
 
 @app_views.route('/cities/<cities_id>', methods=['PUT'], strict_slashes=False)
-def update_city(state_id):
+def update_city(cities_id):
     """ update state """
     keys = ['id', 'created_at', 'updated_at']
-    city = storage.get('City', state_id)
+    city = storage.get('City', cities_id)
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
     for key, value in request.get_json().items():
         if key in keys:
             pass
         else:
-            setattr(state, key, value)
+            setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
