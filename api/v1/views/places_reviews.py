@@ -5,7 +5,7 @@ from models import storage
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models.state import State
-from models.state import Review
+from models.review import Review
 
 
 @app_views.route('/places/<place_id>/reviews',
