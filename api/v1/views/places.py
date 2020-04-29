@@ -9,23 +9,24 @@ from models.place import Place
 from models.city import City
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
 def retrieve_all_places(city_id):
     """ Retrieves the list of amenities """
-    if states is None:
-        abort(404)
-    place = storage.all("Place")
-    places_of_cities = [i.to_dict() for i in place.values()
-                        if i.city_id == city_id]
-    return (jsonify(places_of_state))
+    if "city.{}".format(city_id) not in cities:
+        abort (404)
+    return jsonify([i.to_dict() for i in
+                       storage.get('City', city_id).places])
 
 
 @app_views.route('/places/<place_id>',
                  methods=['GET'], strict_slashes=False)
 def retrieve_places_id(place_id=None):
     """ Retrieves a Amenity object """
-    place = storage.get("Place", place_id)
-    if user is None:
+    list_places = storage.all('Place')
+    if "Place.{}".format(place_id) not in list_places:
+        abort(404)
+    places = storage.get('Place', place_id)
+    if place is None:
         abort(404)
     return jsonify(place.to_dict())
 
