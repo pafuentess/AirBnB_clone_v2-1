@@ -49,23 +49,23 @@ def delete_place(place_id):
                  strict_slashes=False)
 def create_place(city_id):
     """ create place """
-    data = request.get_json()
-    if data is None:
+    info = request.get_json()
+    if info is None:
         abort(400, "Not a JSON")
-    if "user_id" not in data:
+    if "user_id" not in info:
         abort(400, "Missing user_id")
-    user = storage.get("User", data["user_id"])
-    if user is None:
+    user = storage.get("User", info["user_id"])
+    if info is None:
         abort(404)
     if "name" not in data:
         abort(400, "Missing name")
-    data["city_id"] = city_id
+    info["city_id"] = city_id
     place = Place(**data)
     place.save()
     return jsonify(place.to_dict()), 201
 
 
-@app_views.route('/place/<place_id>',
+@app_views.route('/places/<place_id>',
                  methods=['PUT'], strict_slashes=False)
 def update_place(place_id):
     """ update state """

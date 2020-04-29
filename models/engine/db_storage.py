@@ -77,7 +77,7 @@ class DBStorage:
 
     def get(self, cls, id):
         """ Return the class and id if exists """
-        if type(cls) is not  str:
+        if type(cls) is not str:
             if cls and id:
                 string = str(cls)
                 split = string.split(".")
@@ -93,13 +93,11 @@ class DBStorage:
                 return data[search]
         return (None)
 
-
     def count(self, cls=None):
         """ count the all the object of cls """
         return len(self.all(cls))
 
     def cut_char(sel, string):
         """ make a copy of class without ' and > """
-        copy=string[0:-2]
+        copy = string[0:-2]
         return(copy)
-

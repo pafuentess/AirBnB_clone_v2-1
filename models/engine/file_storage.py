@@ -71,7 +71,7 @@ class FileStorage:
 
     def get(self, cls, id):
         """  retrieve one object """
-        if type(cls) is not  str:
+        if type(cls) is not str:
             if cls and id:
                 string = str(cls)
                 split = string.split(".")
@@ -82,7 +82,7 @@ class FileStorage:
                     return data[search]
         else:
             data = self.all(cls)
-            search = "{}.{}".format(cls, id) 
+            search = "{}.{}".format(cls, id)
             if search in data:
                 return data[search]
         return (None)
@@ -93,6 +93,5 @@ class FileStorage:
 
     def cut_char(sel, string):
         """ make a copy of class without ' and > """
-        copy=string[0:-2]
+        copy = string[0:-2]
         return(copy)
-
