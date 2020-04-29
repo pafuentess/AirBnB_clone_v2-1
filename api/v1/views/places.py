@@ -39,7 +39,7 @@ def delete_place(place_id):
     """ delete amenity """
     places = storage.get("Place", place_id)
     if places is None:
-         abort(404)
+        abort(404)
     storage.delete(places)
     storage.save()
     return jsonify({}), 200
@@ -48,22 +48,21 @@ def delete_place(place_id):
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
 def create_place(city_id):
-    """ create amenity """
-    cities = storage.all("City")
-    if "city.{}".format(city_id) not in cities:
+    """ create place """
+    data = request.get_json()
+    if data is None:
+        abort(400, "Not a JSON")
+    if "user_id" not in data:
+        abort(400, "Missing user_id")
+    user = storage.get("User", data["user_id"])
+    if user is None:
         abort(404)
-    city = storage.get("City", city_id)
-    if city is None:
-        abort(404)
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
-    if 'user_id' not in request.get_json():
-        return jsonify({"error": "Missing user_id"}), 400
-    dic = request.get_json()
-    dic.update({'city_id': city_id})
-    instance = Place(**dic)
-    instance.save()
-    return jsonify(instance.to_dict()), 201
+    if "name" not in data:
+        abort(400, "Missing name")
+    data["city_id"] = city_id
+    place = Place(**data)
+    place.save()
+    return jsonify(place.to_dict()), 201
 
 
 @app_views.route('/place/<place_id>',
