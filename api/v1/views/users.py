@@ -19,7 +19,7 @@ def retrieve_all_users():
                  methods=['GET'], strict_slashes=False)
 def retrieve_users_id(user_id=None):
     """ Retrieves a Amenity object """
-    user = storage.get("User", amenity_id)
+    user = storage.get("User", user_id)
     if user is None:
         abort(404)
     return jsonify(user.to_dict())
