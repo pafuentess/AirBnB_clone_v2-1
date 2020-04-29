@@ -30,12 +30,12 @@ def retrieve_state_id(state_id):
                  strict_slashes=False)
 def Delete_state(state_id):
     """Deletes a State object"""
-    try:
-        state = storage.get('State', state_id)
+    state = storage.get('State', state_id)
+    if state:
         storage.delete(state)
         storage.save()
         return jsonify({}), 200
-    except Exception:
+    else:
         abort(404)
 
 
@@ -44,7 +44,7 @@ def Post_state():
     """ Create a State object"""
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
-    if 'name' not in request.json:
+    if 'name' not in request.get_json():
         return jsonify({"error": "Missing name"}), 400
     instance = State(**request.get_json())
     instance.save()

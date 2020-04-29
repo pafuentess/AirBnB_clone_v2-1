@@ -21,8 +21,8 @@ def retrieve_users_id(user_id=None):
     """ Retrieves a Amenity object """
     user = storage.get("User", amenity_id)
     if amenity is None:
-        abort(404, 'Not found')
-    return jsonify(user.to_json())
+        abort(404)
+    return jsonify(user.to_dict())
 
 
 @app_views.route("/users/<user_id>",
@@ -31,14 +31,14 @@ def delete_user(amenity_id=None):
     """ delete amenity """
     user = storage.get("Amenity", amenity_id)
     if user is None:
-        abort(404, 'Not found')
+        abort(404)
     user.delete()
     user.save()
     return jsonify({}), 200
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
-def create_amenities():
+def create_users():
     """ create amenity """
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
