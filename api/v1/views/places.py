@@ -13,8 +13,8 @@ from models.city import City
                  strict_slashes=False)
 def retrieve_all_places(city_id):
     """ Retrieves the list of amenities """
-    cities = storage.all('City')
-    if "City.{}".format(city_id) not in cities:
+    cities = storage.get('City', city_id)
+    if cities is None:
         abort(404)
     return jsonify([i.to_dict() for i in
                    storage.get('City', city_id).places])
@@ -24,9 +24,6 @@ def retrieve_all_places(city_id):
                  methods=['GET'], strict_slashes=False)
 def retrieve_places_id(place_id):
     """ Retrieves a Amenity object """
-    list_places = storage.all('Place')
-    if "Place.{}".format(place_id) not in list_places:
-        abort(404)
     places = storage.get('Place', place_id)
     if places is None:
         abort(404)
@@ -49,6 +46,9 @@ def delete_place(place_id):
                  strict_slashes=False)
 def create_place(city_id):
     """ create place """
+    cities = storage.get("City", city_id)
+    if cities is None:
+        abort(404)
     info = request.get_json()
     if info is None:
         abort(400, "Not a JSON")
