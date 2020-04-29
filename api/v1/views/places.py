@@ -45,7 +45,7 @@ def delete_place(place_id=None):
 @app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
 def create_place(city_id):
     """ create amenity """
-    cities = storage.all("City"
+    cities = storage.all("City")
     if "city.{}".format(city_id) not in cities:
         abort (404)
     city = storage.get("City", city_id)
