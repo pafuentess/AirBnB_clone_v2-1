@@ -20,20 +20,20 @@ def retrieve_all_users():
 def retrieve_users_id(user_id=None):
     """ Retrieves a Amenity object """
     user = storage.get("User", amenity_id)
-    if amenity is None:
+    if user is None:
         abort(404)
     return jsonify(user.to_dict())
 
 
 @app_views.route("/users/<user_id>",
                  methods=['DELETE'], strict_slashes=False)
-def delete_user(amenity_id=None):
+def delete_user(user_id=None):
     """ delete amenity """
-    user = storage.get("Amenity", amenity_id)
+    user = storage.get("User", user_id)
     if user is None:
         abort(404)
-    user.delete()
-    user.save()
+    storage.delete(user)
+    storage.save()
     return jsonify({}), 200
 
 
@@ -42,9 +42,9 @@ def create_users():
     """ create amenity """
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
-    if 'email' not in request.json:
+    if 'email' not in request.get_json():
         return jsonify({"error": "Missing email"}), 400
-    if 'password' not in request.json:
+    if 'password' not in request.get_json():
         return jsonify({"error": "Missing password"}), 400
     instance = User(**request.get_json())
     instance.save()
@@ -55,14 +55,16 @@ def create_users():
                  methods=['PUT'], strict_slashes=False)
 def update_user(user_id):
     """ update state """
-    keys = ['id', 'created_at', 'updated_at']
+    keys = ['id', 'created_at', 'updated_at', 'email']
     user = storage.get('User', user_id)
+    if user is None:
+        abort(404)
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
     for key, value in request.get_json().items():
         if key in keys:
             pass
         else:
-            setattr(state, key, value)
+            setattr(user, key, value)
     user.save()
     return jsonify(user.to_dict()), 200
