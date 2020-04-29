@@ -14,9 +14,9 @@ def retrieve_cites_of_state_id(state_id=None):
     """ Retrieves the list of all City objects of a State """
     states = storage.get("State", state_id)
     if state is None:
-        abort(404, "Not found")
+        abort(404)
     cities = storage.all("City")
-    cities_of_state = [i.to_json() for i in cities.values()
+    cities_of_state = [i.to_dict() for i in cities.values()
                        if i.state_id == state_id]
     return (jsonify(cities_of_state))
 
@@ -26,8 +26,8 @@ def retrieve_city(city_id=None):
     """ retrieve cities """
     cities = storage.get("City", city_id)
     if cities is None:
-        abort(404, 'Not found')
-        return jsonify(cities.to_json())
+        abort(404)
+    return jsonify(cities.to_dict())
 
 
 @app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)

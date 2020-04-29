@@ -12,19 +12,19 @@ from models.amenity import Amenity
 def retrieve_all_amenities():
     """ Retrieves the list of amenities """
     amenities = storage.all("Amenity")
-    amenities = [i.to_json() for i in amenities.values()
+    amenities = [i.to_dict() for i in amenities.values()
                  if i.state_id == state_id]
     return (jsonify(amenities))
 
 
 @app_views.route('/amenities/<amenity_id>',
                  methods=['GET'], strict_slashes=False)
-def retrieve_amenity(Amenity_id=None):
+def retrieve_amenity(amenity_id=None):
     """ Retrieves a Amenity object """
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
-        abort(404, 'Not found')
-    return jsonify(amenity.to_json())
+        abort(404)
+    return jsonify(amenity.to_dict())
 
 
 @app_views.route("/amenities/<amenity_id>",
@@ -33,13 +33,13 @@ def delete_amenity(amenity_id=None):
     """ delete amenity """
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
-        abort(404, 'Not found')
+        abort(404)
     amenity.delete()
     amenity.save()
     return jsonify({}), 200
 
 
-@app_views.route('/amenites', methods=['POST'], strict_slashes=False)
+@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def create_amenities():
     """ create amenity """
     if not request.get_json():
