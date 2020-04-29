@@ -76,7 +76,7 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
-        """  retrieve one object """
+        """ Return the class and id if exists """
         if type(cls) is not  str:
             if cls and id:
                 string = str(cls)
@@ -95,8 +95,8 @@ class DBStorage:
 
 
     def count(self, cls=None):
-        """ count the number of objects in storage """
-        return (len(self.all(cls)))
+        """ count the all the object of cls """
+        return len(self.all(cls))
 
     def cut_char(sel, string):
         """ make a copy of class without ' and > """
